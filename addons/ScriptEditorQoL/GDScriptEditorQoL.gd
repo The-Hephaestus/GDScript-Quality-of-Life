@@ -305,6 +305,12 @@ func changed_line(_from_line: int, _to_line: int) -> void:
 
 #region Checks
 func _shortcut_input(event: InputEvent) -> void:
+	#if event is InputEventKey and event.is_pressed() and not event.is_echo():
+	#	print("[QoL] %s | script=%s | M=%s | U=%s" % [
+	#		event.as_text(),
+	#		current_script != null,
+	#		event.is_match(create_method_shortcut),
+	#		event.is_match(update_line_shortcut)])
 	if not current_script: return # If there is no current_script, no shortcut should be called
 	# Only proceed if event is just pressed (not holding) and it is in a valid current code.
 	if not event.is_pressed() or event.is_echo() or not current_code: return
@@ -1057,6 +1063,7 @@ func shortcut_detected(method_called: Callable) -> void:
 ## If no text is selected, the word under caret is used as described above.[br]
 ## If no word under caret is found, it returns.
 func create_method() -> void:
+	#print("[QoL] create_method | selektiert='%s'" % current_code.get_selected_text())
 	var text: String = current_code.get_selected_text()
 	if not text:
 		text = current_code.get_word_under_caret()
@@ -1079,7 +1086,16 @@ func create_method() -> void:
 func created_method(method_name: String,  param: String,  return_type: String, text: String) -> void:
 	var selection_line: int = current_code.get_selection_from_line() # Remember where text is
 	var last_clipboard_text: String = DisplayServer.clipboard_get() # Remember what user has in clipboard
-	DisplayServer.clipboard_set("%s(%s)" % [method_name, param]) # Overwrite clipboard to call the created method
+	var call_text: String = "%s(%s)" % [method_name, param]
+	var text_before: String = current_code.get_line(
+		current_code.get_selection_from_line()
+	).left(current_code.get_selection_from_column())
+	if text_before.strip_edges().ends_with("connect("):
+		call_text = method_name
+	DisplayServer.clipboard_set(call_text)
+	if text_before.strip_edges().ends_with("connect("):
+		call_text = method_name
+	DisplayServer.clipboard_set(call_text)
 	current_code.paste() # Paste method callable where text is selected
 	DisplayServer.clipboard_set(last_clipboard_text) # Return the previous clipboard content
 	
