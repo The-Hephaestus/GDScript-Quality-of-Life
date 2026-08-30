@@ -186,7 +186,7 @@ The name of the created variable can be adjusted at [plugin settings](#plugin-se
 
 ----------------------------------------
 - ### Create method from selection
-Use the shortcut `Ctrl + M` to create a method from selected text. You can change the shortcut at [plugin settings](#plugin-settings).
+Use the shortcut `Ctrl + Alt + M` to create a method from selected text. You can change the shortcut at [plugin settings](#plugin-settings).
 
 You can optionally choose the method name, parameters and return type.
 
@@ -198,7 +198,7 @@ The new created method will be placed at the very bottom of your code, and where
 
 -----------------------------------------
 - ### Create method from word
-If you use the shortcut `Ctrl + M` and there is no selected text, the word under caret will be selected and a method will be automatically created with this word as method name.
+If you use the shortcut `Ctrl + Alt + M` and there is no selected text, the word under caret will be selected and a method will be automatically created with this word as method name.
 
 If the caret is at the end of a word, it will first select the whole word, and the shortcut need to be pressed again to create the method.
 
@@ -243,7 +243,7 @@ If it should remove the indentation from middle of line when a delete action joi
 - ### Create Method Shortcut
 The shortcut to create method from selection. The method created will be placed at the end of the code. 
 
->Default value: `ctrl + M`
+>Default value: `Ctrl + Alt + M`
 
 - ### Update Line Shortcut
 The shortcut to update the current line without pressing ENTER. 
