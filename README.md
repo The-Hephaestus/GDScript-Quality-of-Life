@@ -7,9 +7,7 @@ This plugin should work for Godot 4.2+.
 If you really like it and feel like [buying me a piece of cake](https://herbherth.itch.io/gdscript-quality-of-life-plugin) for my efforts, it would be greatly appreciated, thank you!
 
 ## Installation:
-- Easiest way: install via [Godot Asset Store](https://godotengine.org/asset-library/asset/3179).
-
-OR:
+DO NOT install this addon through the godot asset store as it is outdated
 
 - Download and unzip the plugin at `res://`, in the end your project should have this path: `res://addons/ScriptEditorQoL`.
 - Make sure to enable the plugin at `Project -> Project Settings -> Plugins`
