@@ -155,6 +155,7 @@ func _enter_tree() -> void:
 	set_editor_settings()
 	# It looks like a different script calls a different CodeEdit, so we need to recall it every time you change the script 
 	EditorInterface.get_script_editor().editor_script_changed.connect(get_editor_code_edit)
+	get_editor_code_edit.call_deferred()
 
 
 func _exit_tree() -> void:
@@ -233,12 +234,18 @@ func remove_editor_settings() -> void:
 ## needs to be passed as parameter.[br]
 ## [br]It also saves the current script that is being edited in [member current_script].
 func get_editor_code_edit(_script: Script = null) -> void:
-	if current_code: # If there is already a CodeEdit, disconnect the signals and get the new one
+	var editor_base = EditorInterface.get_script_editor().get_current_editor()
+	if editor_base == null:
+		return
+	var new_code := editor_base.get_base_editor() as CodeEdit
+	if new_code == null:
+		return
+	if current_code:
 		if current_code.lines_edited_from.is_connected(changed_line):
 			on_code_edit_exit()
 		current_code.focus_entered.disconnect(on_code_edit_focus)
 		current_code.focus_exited.disconnect(on_code_edit_exit)
-	current_code = EditorInterface.get_script_editor().get_current_editor().get_base_editor()
+	current_code = new_code
 	current_code.focus_entered.connect(on_code_edit_focus)
 	current_code.focus_exited.connect(on_code_edit_exit)
 	on_code_edit_focus()
@@ -261,9 +268,19 @@ func on_code_edit_exit() -> void:
 
 
 func _notification(what):
-	# When the ScriptEditor is floating, loses the focus when focusing the main engine
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
-		if current_script: on_code_edit_exit()
+		resync_focus_state.call_deferred()
+func resync_focus_state() -> void:
+	if current_code == null:
+		return
+
+	var window: Window = current_code.get_window()
+	var is_active: bool = current_code.has_focus() and window != null and window.has_focus()
+
+	if is_active and current_script == null:
+		on_code_edit_focus()
+	elif not is_active and current_script != null:
+		on_code_edit_exit()
 
 
 ## Called when [member current_code] emit [signal TextEdit.lines_edited_from]
