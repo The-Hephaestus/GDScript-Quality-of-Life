@@ -167,11 +167,12 @@ func _exit_tree() -> void:
 
 
 ## Creates and return the default [InputEventKey] that will be used for [member create_method_shortcut][br]
-## The default value is [kbd]Ctrl + M[/kbd] and can be changed at [code]Editor -> Editor Settings -> GDScript QoL[/code]
+## The default value is [kbd]Ctrl + Alt + M[/kbd] and can be changed at [code]Editor -> Editor Settings -> GDScript QoL[/code]
 func input_create_method() -> InputEventKey:
 	var cm: InputEventKey = InputEventKey.new()
 	cm.keycode = KEY_M
 	cm.ctrl_pressed = true
+	cm.alt_pressed = true
 	return cm
 
 
